@@ -1,0 +1,60 @@
+instance,zone,busy,model,power_status,type,update_time,time_remaining
+instance-9,us-east1-c,false,,,,,
+instance-03,us-west1-b,false,,false,,2021-06-23 19:59:47 UTC,
+instance-04,us-east1-c,false,,false,,2021-06-23 20:00:37 UTC,
+instance-05,europe-west1-b,false,,false,,2021-06-23 19:59:23 UTC,
+instance-07,us-central1-a,false,,false,,2021-06-23 20:04:22 UTC,
+instance-10,us-central1-a,false,,false,,2021-06-22 18:32:59 UTC,
+instance-11,us-central1-c,false,,,,,
+instance-17,us-west4-a,false,,,,,
+instance-21,asia-southeast2-a,false,,,,,
+instance-22,australia-southeast1-c,false,,,,,
+instance-23,southamerica-east1-c,false,,,,,
+instance-24,us-east1-c,false,,,,,
+instance-25,asia-northeast1-c,false,,,,,
+instance-26,us-west1-b,false,,,,,
+instance-27,asia-east1-a,false,,,,,
+instance-28,europe-west2-a,false,,,,,
+instance-29,europe-west3-b,false,,,,,
+instance-30,europe-west4-b,false,,,,,
+instance-b-01,asia-east1-a,false,,,,,
+instance-b-01,asia-east1-a,false,,,,,
+instance-b-02,asia-northeast1-c,false,,,,,
+instance-b-02,asia-northeast1-c,false,,,,,
+instance-b-03,us-central1-a,false,,,,,
+instance-b-03,us-east4-b,false,,,,,
+instance-b-04,asia-northeast1-a,false,,,,,
+instance-b-05,asia-south1-b,false,,,,,
+instance-01,asia-northeast1-c,false,,false,,2021-06-29 18:20:15.779191 UTC,149/150
+instance-02,us-west4-a,false,,false,,2021-06-29 11:51:17.110674 UTC,149/150
+instance-06,asia-south1-b,false,,false,,2021-06-29 16:21:34.537746 UTC,149/150
+instance-08,asia-northeast1-c,false,,false,,2021-06-29 11:19:32.417142 UTC,149/150
+instance-09,asia-northeast3-b,false,,false,,2021-06-29 12:11:10.996060 UTC,149/150
+instance-12,us-central1-f,false,,,,2021-06-29 10:59:50.441150 UTC,149/150
+instance-13,asia-east1-a,false,,,,2021-06-29 11:04:35.446347 UTC,149/150
+instance-14,asia-east1-a,false,,,,2021-06-29 18:49:27.006852 UTC,149/150
+instance-15,asia-northeast1-c,false,,,,2021-06-29 11:59:39.287114 UTC,149/150
+instance-16,asia-east1-a,false,,,,2021-06-29 17:20:33.900584 UTC,149/150
+instance-18,asia-south1-b,false,,,,2021-06-29 16:24:18.884900 UTC,149/150
+instance-19,asia-southeast1-b,false,,,,2021-06-29 11:31:37.621479 UTC,149/150
+instance-20,asia-southeast1-b,false,,,,2021-06-29 17:27:32.273791 UTC,149/150
+instance-34,australia-southeast1-c,false,,,,,
+instance-38,asia-southeast1-b,false,,,,,
+instance-50,us-east4-b,false,,,,,
+instance-48,us-east1-d,false,,,,,
+instance-45,us-west1-a,false,,,,,
+instance-31,asia-east1-a,false,,,,,
+instance-47,us-east4-b,false,,,,,
+instance-39,australia-southeast1-c,false,,,,,
+instance-37,asia-southeast1-b,false,,,,,
+instance-49,us-west1-b,false,,,,,
+instance-35,asia-south1-b,false,,,,,
+instance-33,asia-northeast3-b,false,,,,,
+instance-42,asia-northeast1-c,false,,,,,
+instance-41,asia-east1-a,false,,,,,
+instance-44,us-east1-d,false,,,,,
+instance-46,us-east1-c,false,,,,,
+instance-40,asia-southeast1-b,false,,,,,
+instance-32,asia-northeast1-a,false,,,,,
+instance-36,asia-southeast1-b,false,,,,,
+instance-43,us-west4-a,false,,,,,

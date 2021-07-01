@@ -1,0 +1,15 @@
+41
+
+docker run --rm --gpus all -it gcr.io/shelfauditdec19/my_darknet doralon_dairy-categories doralon_dairy 5000 --use_new_mapping --email eldad@arpalus.com
+
+42
+
+docker run --rm --gpus all -it gcr.io/shelfauditdec19/my_darknet   specific-bottles doralon_dairy 5000 --use_new_mapping --email none
+
+43
+
+docker run --rm --gpus all -it gcr.io/shelfauditdec19/my_darknet  specific-milk-alternatives doralon_dairy 5000 --use_new_mapping --email none
+
+44
+failed 
+docker run --rm --gpus all -it gcr.io/shelfauditdec19/my_darknet   specific-various-dairy doralon_dairy 5000 --use_new_mapping --email none
