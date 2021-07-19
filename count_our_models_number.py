@@ -18,6 +18,7 @@ with open(f'{training_days_dirs}', 'r') as f :
     with open ( output_file_name, 'a') as w : 
 
         for i,line in enumerate(f) :
+            
             util_list = []
             result = subprocess.run(['gsutil','ls', f'{line}'], stdout=subprocess.PIPE)
             result_long_str = result.stdout.decode("utf-8")
