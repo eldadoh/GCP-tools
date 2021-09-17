@@ -8,7 +8,7 @@ echo "##############################################"
 
 # enter more commands ...
 
-docker run --rm -it gcr.io/shelfauditdec19/my_darknet doralon_dairy-categories doralon_dairy 100 --use_new_mapping --email eldad@arpalus.com
+docker run --rm -it gcr.io/shelfauditdec19/my_darknet doralon_dairy-categories doralon_dairy 100 --use_new_mapping 
 
 echo "##############################################"
 echo "              Done Training                   "

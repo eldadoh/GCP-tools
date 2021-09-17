@@ -1,6 +1,6 @@
 import os 
 import subprocess
-from parse_vm_data import parse_vm_csv
+from vm_commands import get_vm_data_csv
 from gcp_vm_commands import run_one_vm_cycle,stop_vm
 
 def main():

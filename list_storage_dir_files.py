@@ -26,7 +26,7 @@ def list_storage_dir_files_func(BUCKET,SUFFIX):
         result_long_list = result_long_str.splitlines() 
         
         [util_list.append(item) for item in result_long_list if item.endswith(SUFFIX)]
-        result_long_list = [item.split('/')[-1] + '\n'  for item in result_long_list if item.endswith('.jpg')]
+        result_long_list = [item.split('/')[-1] + '\n'  for item in result_long_list if item.endswith(SUFFIX)]
         w.writelines(result_long_list)
 
 def main(): 
