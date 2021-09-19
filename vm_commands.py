@@ -13,7 +13,7 @@ def get_vm_data_csv(csv_filename):
     return insatnces,zones 
 
 def start_command(instance_name_str,zone_str):
-    command = f'gcloud compute instances start --zone {zone_str}  {instance_name_str}'
+    command = f'gcloud compute instances start --zone {zone_str}  {instance_name_str}&'
     os.system(command)
 
 def start_all_vms(instances,zones):
@@ -32,7 +32,7 @@ def start_specific_vms(vms_list:list):
     return chosen_vms_data[0]
 
 def stop_command(instance_name_str,zone_str):
-    command = f'gcloud compute instances stop --zone {zone_str}  {instance_name_str}'
+    command = f'gcloud compute instances stop --zone {zone_str}  {instance_name_str}&'
     os.system(command)
 
 def stop_all_vms(instances,zones):
@@ -66,14 +66,17 @@ def start_and_connect_to_vm(vm_number:int):
 def main(): 
 
     instances,zones = get_vm_data_csv(VM_DATA_CSV_PATH)
-    # stop_specific_range_vms(2,5)
+    # stop_specific_range_vms(2,5)5-2+1 
     # chosen_vms_data = start_specific_vms([62,63])
     # ssh_login_and_run_commands_script(instance_name_str='instance-12',zone_str=chosen_vms_data['instance-12'])
     # start_specific_vms([23])
     # ssh_to_machine_via_number(23)
-    # stop_specific_vms([23])
-    # start_and_connect_to_vm(vm_number=23)
-    stop_specific_vms([23])
+    # start_specific_vms([1,2,3,4,5])
+    # stop_specific_vms([1,2,3,4,5])
+    # # start_and_connect_to_vm(vm_number=23)
+    # stop_all_vms(instances,zones)
+    
+
 if __name__ == "__main__":
     
     main()
