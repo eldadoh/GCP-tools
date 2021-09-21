@@ -87,8 +87,6 @@ def start_specific_range_vms(start_number,end_number):
 def start_all_vms(instances,zones):
     [start_command(instance_name,instance_zone) for (instance_name,instance_zone) in zip(instances,zones)]
 
-
-
 def stop_command(instance_name_str,zone_str):
     command = f'gcloud compute instances stop --zone {zone_str}  {instance_name_str}&'
     os.system(command)
@@ -108,16 +106,12 @@ def stop_specific_range_vms(start_number,end_number:list):
 def stop_all_vms(instances,zones):
     [stop_command(instance_name,instance_zone) for (instance_name,instance_zone) in zip(instances,zones)]
 
-
 def ssh_login_and_run_commands_script(df,vm_number,command = SCRIPT_NAME_ON_ALL_VM_BASE_PATH_RUN_COMMAND, project_name_str=PROJECT_NAME):
     instance_name, zone = get_vm_attributes_from_vm_number(df,vm_number)
     if command is not None : 
         return os.system (f'gcloud beta compute ssh --zone {zone} {instance_name}  --project {project_name_str} --command={command}')
     else : 
         return os.system (f'gcloud beta compute ssh --zone {zone} {instance_name}  --project {project_name_str}')
-
-
-
 
 def get_vm_attributes_from_vm_number(df, vm_number : int): 
     instance_name = f'instance-' + str(vm_number).zfill(2)
