@@ -1,6 +1,6 @@
 import json
 import pandas as pd ,numpy as np
-import os,subprocess,json
+import os,subprocess,json,shutil
 from constants import *
 from google.cloud import storage
 
@@ -97,47 +97,83 @@ def start_and_connect_to_vm(vm_number:int):
     start_specific_vms([f'{vm_number}'])
     ssh_to_machine_via_number(vm_number)
 
+
+def get_vm_attributes_from_df_query(df):
+    instance_names,zone_names = df['instance'].to_list(),df['zone'].to_list()
+    vm_data_dict = dict(zip(instance_names, zone_names))
+    return vm_data_dict
+
 def get_vm_attributes_from_vm_number(df, vm_number : int): 
     instance_name = f'instance-' + str(vm_number).zfill(2)
     instance_idx = list(np.where(df['instance'] == instance_name)[0])
     zone = df.iloc[instance_idx]['zone'].item()
     return instance_name,zone
 
-def send_script_to_vm(df,vm_number,src_path = None , dest_path = None): 
-
+def send_script_to_vm_by_vm_number(df,vm_number,src_path = None , dest_path = None): 
+    #deprecated for now
     instance_name , zone = get_vm_attributes_from_vm_number(df, vm_number)
     if src_path == None : src_path = './pull_docker.sh'
     if dest_path == None : dest_path = f'{instance_name}:~'
-    return os.system(f'gcloud compute scp --project {PROJECT_NAME} --zone {zone} {src_path} {dest_path} ')
+    return os.system(f'gcloud compute scp --project {PROJECT_NAME} --zone {zone} {src_path} {dest_path}')
 
-def send_script_to_all_vms(df):
-
+def send_script_to_all_vms_by_vm_numbers(df):
+    #deprecated for now
     #currently serial and not parallel
-
     df['vm_number'] = df['instance'].apply(lambda x : str(int(x.split(sep='-')[-1].strip())))
     vm_numbers = df['vm_number'].to_list()
-    [send_script_to_vm(df,vm_number) for vm_number in vm_numbers[5:7]]
+    [send_script_to_vm_by_vm_number(df,vm_number) for vm_number in vm_numbers]
+
+
+def send_script_to_vm(df,vm_name,src_path = None , dest_path = None):
+    vm_data_dict = get_vm_attributes_from_df_query(df)
+    vm_zone = vm_data_dict[f'{vm_name}']
+    if src_path == None : src_path = './pull_docker.sh'
+    if dest_path == None : dest_path = f'{vm_name}:~'
+    return os.system(f'gcloud compute scp --project {PROJECT_NAME} --zone {vm_zone} {src_path} {dest_path}')
+
+def send_script_to_all_vms(df,vm_data_dict):
+    #currently serial and not parallel
+    [send_script_to_vm(df,vm_name) for vm_name in vm_data_dict.keys()]
+
+def read_commands_from_txt(commands_txt_file): 
+    with open (f'{commands_txt_file}','r') as f: 
+        commands = [line.strip() for line in f]
+    return commands
+
+def reset_dir(dir_path):
+    try:
+        shutil.rmtree(dir_path)
+        os.makedirs(dir_path)
+    except Exception:
+        print(Exception)
+        return False 
+
+def generate_bash_scripts_with_commands(commands):
+    """generate scripts to BASH_SCRIPTS_PATH"""
+    reset_dir(BASH_SCRIPTS_PATH)
+    num_of_commands = len(commands)
+    [os.system(f'touch {BASH_SCRIPTS_PATH}/command{i+1}.sh') for i in range(num_of_commands)]
+
+    for i in range(num_of_commands):
+        lines = ['#!/bin/sh', f'{commands[i]}','exit 0']
+        with open(f'{BASH_SCRIPTS_PATH}/command{i+1}.sh', 'w') as f : 
+            f.writelines(f'{line}\n' for line in lines)
 
 def main(): 
 
     df,instances,zones = get_vm_data_csv(VM_DATA_CSV_PATH)
+    vm_data_dict = get_vm_attributes_from_df_query(df)
     
-    # start_specific_vms([21])
-    # ssh_login_and_run_commands_script(df,21,command="bash pull_docker.sh")
-    
-    # ssh_login_and_run_commands_script(df,21,command = SCRIPT_NAME_ON_ALL_VM_BASE_PATH_RUN_COMMAND)
-    # ssh_login_and_run_commands_script(df,command = "ls")
-    # ssh_login_and_run_commands_script(df,21,command = f'docker pull gcr.io/shelfauditdec19/my_darknet:live-tag')
-    
-    # stop_specific_range_vms(2,5)5-2+1 
-    # chosen_vms_data = start_specific_vms([62,63])
-    # ssh_login_and_run_commands_script(instance_name_str='instance-12',zone_str=chosen_vms_data['instance-12'])
-    # start_specific_vms([23])
-    # ssh_to_machine_via_number(23)
+    commands = read_commands_from_txt(COMMANDS_TXT_FILE)
+    generate_bash_scripts_with_commands(commands)
+    # send_script_to_all_vms(df,vm_data_dict)
+    # ssh_login_and_run_commands_script(df,21,command="bash pull_docker.sh") 
     # send_script_to_vm(df,21)
-    # start_specific_vms([1,2,3,4,5])
-    # send_script_to_all_vms(df)
-    stop_specific_vms([1,2,3,4,5,6])
+    # send_script_to_all_vms(df,vm_data_dict)
+
+    # start_specific_vms([])
+    # stop_specific_vms([])
+    
 
     
 

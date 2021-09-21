@@ -6,14 +6,4 @@ echo "##############################################"
 echo "              Done Pulling                    "
 echo "##############################################"
 
-# enter more commands ...
-
-# docker run --rm -it gcr.io/shelfauditdec19/my_darknet doralon_dairy-categories doralon_dairy 100 --use_new_mapping 
-
-# echo "##############################################"
-# echo "              Done Training                   "
-# echo "##############################################"
-
-
-
 exit 0 
