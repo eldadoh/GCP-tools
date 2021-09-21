@@ -80,13 +80,10 @@ def stop_specific_vms(vms_list:list):
     [stop_command(instance_name,instance_zone) for (instance_name,instance_zone) in chosen_vms_data]
     return chosen_vms_data
 
-def get_vm_attributes_from_vm_number(df, vm_number : int) : 
-    instance_name = f'instance-' + str(vm_number).zfill(2)
-    instance_idx = list(np.where(df['instance'] == instance_name)[0])
-    zone = df.iloc[instance_idx]['zone'].item()
-    return instance_name,zone
+def ssh_login_and_run_commands_script(df,vm_number,command = SCRIPT_NAME_ON_ALL_VM_BASE_PATH_RUN_COMMAND, project_name_str=PROJECT_NAME):
 
-def ssh_login_and_run_commands_script(df,vm_number,command = None, project_name_str=PROJECT_NAME):
+    # SCRIPT_NAME_ON_ALL_VM_BASE_PATH_RUN_COMMAND = "./pull_docker.sh"
+
     instance_name, zone = get_vm_attributes_from_vm_number(df,vm_number)
     if command is not None : 
         return os.system (f'gcloud beta compute ssh --zone {zone} {instance_name}  --project {project_name_str} --command={command}')
@@ -100,11 +97,26 @@ def start_and_connect_to_vm(vm_number:int):
     start_specific_vms([f'{vm_number}'])
     ssh_to_machine_via_number(vm_number)
 
+def get_vm_attributes_from_vm_number(df, vm_number : int): 
+    instance_name = f'instance-' + str(vm_number).zfill(2)
+    instance_idx = list(np.where(df['instance'] == instance_name)[0])
+    zone = df.iloc[instance_idx]['zone'].item()
+    return instance_name,zone
+
 def send_script_to_vm(df,vm_number,src_path = None , dest_path = None): 
+
     instance_name , zone = get_vm_attributes_from_vm_number(df, vm_number)
     if src_path == None : src_path = './pull_docker.sh'
     if dest_path == None : dest_path = f'{instance_name}:~'
-    return os.system(f'gcloud compute scp --project {PROJECT_NAME} --zone {zone} {src_path} {dest_path}')
+    return os.system(f'gcloud compute scp --project {PROJECT_NAME} --zone {zone} {src_path} {dest_path} ')
+
+def send_script_to_all_vms(df):
+
+    #currently serial and not parallel
+
+    df['vm_number'] = df['instance'].apply(lambda x : str(int(x.split(sep='-')[-1].strip())))
+    vm_numbers = df['vm_number'].to_list()
+    [send_script_to_vm(df,vm_number) for vm_number in vm_numbers[5:7]]
 
 def main(): 
 
@@ -113,8 +125,8 @@ def main():
     # start_specific_vms([21])
     # ssh_login_and_run_commands_script(df,21,command="bash pull_docker.sh")
     
-    ssh_login_and_run_commands_script(df,21,command = SCRIPT_NAME_ON_ALL_VM_BASE_PATH)
-    # ssh_login_and_run_commands_script(df,21,command = "ls")
+    # ssh_login_and_run_commands_script(df,21,command = SCRIPT_NAME_ON_ALL_VM_BASE_PATH_RUN_COMMAND)
+    # ssh_login_and_run_commands_script(df,command = "ls")
     # ssh_login_and_run_commands_script(df,21,command = f'docker pull gcr.io/shelfauditdec19/my_darknet:live-tag')
     
     # stop_specific_range_vms(2,5)5-2+1 
@@ -123,6 +135,9 @@ def main():
     # start_specific_vms([23])
     # ssh_to_machine_via_number(23)
     # send_script_to_vm(df,21)
+    # start_specific_vms([1,2,3,4,5])
+    # send_script_to_all_vms(df)
+    stop_specific_vms([1,2,3,4,5,6])
 
     
 
