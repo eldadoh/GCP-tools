@@ -1,8 +1,9 @@
 VM_DATA_CSV_PATH = 'Data/VMs/vms-data-bq.csv'
 OUTPUT_PATH = 'Outputs'
-PROJECT_NAME_STR = 'shelfauditdec19'
+PROJECT_NAME = 'shelfauditdec19'
 VM_DATA_CSV = 'Data/vm_metadata.csv'
 SCRIPT_NAME = 'run_commands.sh'
+SCRIPT_NAME_ON_ALL_VM_BASE_PATH = "./pull_docker.sh"
 
 SSH_COMMAND_BY_VM_NUMBER_DICT = {
     '1':f'gcloud beta compute ssh --zone "asia-northeast1-c" "instance-01"  --project "shelfauditdec19"',
