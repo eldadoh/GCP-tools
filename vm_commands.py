@@ -1,6 +1,6 @@
-import json
-import pandas as pd ,numpy as np
-import os,subprocess,json,shutil
+import pandas as pd
+import numpy as np
+import os,shutil,glob
 from constants import *
 from google.cloud import storage
 
@@ -135,6 +135,18 @@ def send_script_to_all_vms(df,vm_data_dict):
     #currently serial and not parallel
     [send_script_to_vm(df,vm_name) for vm_name in vm_data_dict.keys()]
 
+def send_script_for_specific_vms(df,vm_numbers : list, bash_scripts_path = 'Data/Bash-scripts-generated'):
+    scripts_src_paths = [path for path in sorted(glob.glob(bash_scripts_path+'/*.sh'))]
+    script_names = [os.path.split(script_src_path)[-1] for script_src_path in scripts_src_paths]
+    vm_names = [f'instance-{str(vm_number).zfill(2)}' for vm_number in vm_numbers]
+    vm_name_dict = dict(zip(vm_names, vm_numbers))
+    assert len(vm_names)==len(scripts_src_paths),f'You need to start more VMs\n there are {len(scripts_src_paths)} commands but {len(vm_names)} machines are ON'
+    # [send_script_to_vm(df,vm_name,src_path=script_name) for vm_name,script_name in zip(vm_names,scripts_src_paths)]
+    # [ssh_login_and_run_commands_script(df,vm_name_dict[f'{vm_name}'],command = f'"chmod +x {script_name}"', project_name_str=PROJECT_NAME) for vm_name,script_name in zip(vm_names,script_names)]
+    commands_magic = [f'"./{script_name}"' for script_name in script_names]
+    commands_magic = [item[1:-1] for item in commands_magic]
+    [ssh_login_and_run_commands_script(df,vm_name_dict[f'{vm_name}'],command = command_magic, project_name_str=PROJECT_NAME) for vm_name,script_name,command_magic in zip(vm_names,script_names,commands_magic)]
+
 def read_commands_from_txt(commands_txt_file): 
     with open (f'{commands_txt_file}','r') as f: 
         commands = [line.strip() for line in f]
@@ -153,27 +165,52 @@ def generate_bash_scripts_with_commands(commands):
     reset_dir(BASH_SCRIPTS_PATH)
     num_of_commands = len(commands)
     [os.system(f'touch {BASH_SCRIPTS_PATH}/command{i+1}.sh') for i in range(num_of_commands)]
-
+    [os.system(f'chmod +x {BASH_SCRIPTS_PATH}/command{i+1}.sh') for i in range(num_of_commands)]
+    
     for i in range(num_of_commands):
         lines = ['#!/bin/sh', f'{commands[i]}','exit 0']
         with open(f'{BASH_SCRIPTS_PATH}/command{i+1}.sh', 'w') as f : 
-            f.writelines(f'{line}\n' for line in lines)
+            f.writelines(f'{line}\n' for line in lines) 
+    
+
+def start_vms_as_number_of_commands(df,commands):
+    number_of_vms = len(commands)
+    start_specific_range_vms(1, number_of_vms + 1)
+
+def get_available_machines()-> dict:
+    os.system(r'gcloud compute instances list --format="csv(name,zone,status)" --sort-by=[status] > Data/machines-available.csv')
+    df = pd.read_csv('Data/machines-available.csv')
+    df = df.reset_index(drop=True)
+    df = df[df['status'] == 'RUNNING']
+
+    def check_string(x:str):
+        return x if x.startswith('instance-') else '0' 
+
+    df['name'] = df['name'].apply(check_string)
+    df = df[df['name'] != '0']
+    return dict(zip(df['name'].tolist(),df['zone'].tolist()))
 
 def main(): 
 
     df,instances,zones = get_vm_data_csv(VM_DATA_CSV_PATH)
     vm_data_dict = get_vm_attributes_from_df_query(df)
-    
     commands = read_commands_from_txt(COMMANDS_TXT_FILE)
     generate_bash_scripts_with_commands(commands)
+    # available_machines = get_available_machines()
+    print()
+    
+    # send_script_for_specific_vms(df,vm_numbers=[2,3,4,5,6])
+    # ssh_login_and_run_commands_script(df,5)
+    # ssh_to_machine_via_number(3)
     # send_script_to_all_vms(df,vm_data_dict)
     # ssh_login_and_run_commands_script(df,21,command="bash pull_docker.sh") 
     # send_script_to_vm(df,21)
     # send_script_to_all_vms(df,vm_data_dict)
 
-    # start_specific_vms([])
-    # stop_specific_vms([])
-    #
+    # start_specific_vms([5,6])
+    # stop_specific_vms([2,3,4,5,6])
+
+     
 
     
 
