@@ -207,12 +207,8 @@ def main():
     # send_script_to_vm(df,21)
     # send_script_to_all_vms(df,vm_data_dict)
 
-    # start_specific_vms([5,6])
+    start_specific_vms([2])
     # stop_specific_vms([2,3,4,5,6])
-
-     
-
-    
 
 
 if __name__ == "__main__":
