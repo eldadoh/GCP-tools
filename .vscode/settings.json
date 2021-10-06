@@ -1,0 +1,4 @@
+{
+    "jupyter.generateSVGPlots": true,
+    "jupyter.maxOutputSize": 40000
+}

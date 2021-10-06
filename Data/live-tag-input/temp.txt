@@ -1,0 +1,2 @@
+gs://shelfauditdec19.appspot.com/Sessions/DorAlon/DorAlonStores1/dalivetag/04-10-2021/2021-10-04-104345/2021-10-04-104416/
+gs://shelfauditdec19.appspot.com/Sessions/DorAlon/DorAlonStores1/dalivetag/04-10-2021/2021-10-04-104345/Logs/
